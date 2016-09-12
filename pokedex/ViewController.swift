@@ -99,7 +99,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var poke: Pokemon!
         
+        if inSearchMode{
+            poke = filteredPokemon[indexPath.row]
+            
+        }else{
+            poke = pokemon[indexPath.row]
+            
+        }
+        performSegue(withIdentifier: "PokemonDetailedVC", sender: poke)
     }
     
     
@@ -122,6 +131,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         view.endEditing(true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PokemonDetailedVC" {
+            if let detailsVC = segue.destination as? PokemonDetailedVC{
+                if let poke = sender as? Pokemon{
+                    detailsVC.pokemon = poke
+                }
+            }
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
